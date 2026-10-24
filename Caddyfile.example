@@ -1,0 +1,8 @@
+# Requer domínio apontando para o servidor e portas 80/443 disponíveis.
+oficina.suaempresa.com.br {
+    encode gzip
+    request_body {
+        max_size 34MB
+    }
+    reverse_proxy 127.0.0.1:3000
+}
