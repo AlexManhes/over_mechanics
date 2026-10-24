@@ -4,7 +4,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { mkdtempSync,rmSync,readdirSync } from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { photoStore,migratePhotos } from '../lib/photos.mjs';
+import { photoStore,migratePhotos } from '../src/lib/photos.mjs';
 
 test('migra imagens legadas do SQLite para arquivos e preserva as referências',t=>{
   const directory=mkdtempSync(path.join(os.tmpdir(),'mecanica-migration-'));

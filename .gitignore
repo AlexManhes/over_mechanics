@@ -1,3 +1,22 @@
-data/
+# Dados da oficina: banco e fotos; não são código-fonte.
+/data/
+/photos/
+/uploads/
+/backups/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+
+# Credenciais locais. Apenas o modelo sem segredos é versionado.
 .env
+.env.*
+!.env.example
+
+# Dependências, arquivos temporários e relatórios locais.
+node_modules/
+coverage/
 *.log
+*.tmp
+.DS_Store
+Thumbs.db

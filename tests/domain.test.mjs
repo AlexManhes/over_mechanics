@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { todayBrasilia,addDays,deadline,returnWithin,validateRepair,normalizePlate,validPlate,dayNumber,repairState,selectRepairs } from '../lib/domain.mjs';
+import { todayBrasilia,addDays,deadline,returnWithin,validateRepair,normalizePlate,validPlate,dayNumber,repairState,selectRepairs } from '../src/lib/domain.mjs';
 test('Brasília usa a data local mesmo depois da meia-noite UTC',()=>{
   assert.equal(todayBrasilia(new Date('2026-10-25T02:59:59Z')),'2026-10-24');
   assert.equal(todayBrasilia(new Date('2026-10-25T03:00:00Z')),'2026-10-25');

@@ -6,7 +6,7 @@ import { DatabaseSync } from 'node:sqlite';
 import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {todayBrasilia,addDays} from '../lib/domain.mjs';
+import {todayBrasilia,addDays} from '../src/lib/domain.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aZxkAAAAASUVORK5CYII=';
 test('fluxo real da oficina com banco e fotos persistentes',async t=>{

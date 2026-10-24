@@ -14,7 +14,7 @@ No navegador foram conferidos:
 - Upload de uma imagem de 4000 × 3000 px; JPEG resultante de 2048 × 1536 px gravado no servidor.
 - Layout e navegação de celular e computador.
 
-As capturas em `docs/` usam dados fictícios exclusivamente para demonstrar as telas.
+As capturas em `docs/images/` usam dados fictícios exclusivamente para demonstrar as telas.
 
 Limites: duas sessões confirmam o backend compartilhado, mas uma conexão entre PC/celular físicos na rede real depende de firewall/endereço comum e ainda precisa ser verificada. Câmera física e instalação em Android/iPhone requerem aparelhos e HTTPS. A virada do dia foi testada com datas controladas, sem esperar a meia-noite real. Hospedagem, HTTPS e backups agendados não foram configurados. Se o servidor for o PC, ele precisa permanecer ligado e acessível. Não houve teste de carga para grandes frotas.
 
@@ -26,3 +26,6 @@ Uso local sem login: verificados acesso direto, salvamento de atendimento e foto
 
 
 CSS/manifesto e empresa desativada: endpoints HTTP 200 com MIME correto e URLs versionadas; testes do cache com servidor offline, cache indisponível e ausência de cache. Dados legados de empresa são preservados e o payload novo não os altera. No navegador: cadastro, detalhe, histórico e novo atendimento sem empresa, console sem erros/avisos, e CSS carregado com servidor desligado enquanto a tela orienta abrir Iniciar.bat.
+
+
+Reorganização do repositório: backend em src/, guias em docs/ e exemplo de proxy em config/. O iniciador e o caminho padrão de data/ continuam na raiz. A suíte completa foi executada novamente sobre essa estrutura.

@@ -5,8 +5,8 @@ import {mkdtemp,rm} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
-import {localModeEnabled,isLocalRequest} from '../lib/access.mjs';
-import {todayBrasilia} from '../lib/domain.mjs';
+import {localModeEnabled,isLocalRequest} from '../src/lib/access.mjs';
+import {todayBrasilia} from '../src/lib/domain.mjs';
 
 test('modo sem login fica restrito ao computador e pode ser desativado',()=>{
   assert.equal(localModeEnabled({}),true);
