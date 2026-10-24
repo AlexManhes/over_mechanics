@@ -2,6 +2,8 @@
 
 ## Situação desta entrega
 
+**Preferência atual: acesso com o PC desligado e sem mensalidade.** Veja a [alternativa em VM Always Free com subdomínio gratuito](NUVEM_SEM_MENSALIDADE.md), suas condições e o que ainda precisa ser configurado. A referência Render abaixo é paga e opcional; nenhum serviço pago foi contratado ou publicado.
+
 O código foi preparado para um servidor Node.js com SQLite e **disco persistente**, usando Render como configuração de referência. Isso ainda não significa que o serviço já foi contratado ou publicado. A publicação depende de conectar uma conta de hospedagem, escolher o plano e confirmar a criação do serviço.
 
 Com o serviço publicado, celular e computador usarão **o mesmo endereço HTTPS**, o mesmo banco e as mesmas fotos, inclusive fora do Wi-Fi da oficina. O PC poderá ficar desligado porque o servidor passa a ser a hospedagem. Não basta abrir o repositório do GitHub ou ativar GitHub Pages.

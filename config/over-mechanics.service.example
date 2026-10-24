@@ -1,0 +1,27 @@
+# Modelo para Ubuntu com systemd. Ajuste caminhos antes de instalar.
+# Instale o Node 24 em /usr/local/bin/node e crie o usuario overmechanics.
+[Unit]
+Description=Over Mechanics - API e fotos
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=overmechanics
+Group=overmechanics
+WorkingDirectory=/opt/over_mechanics
+EnvironmentFile=/etc/over-mechanics.env
+ExecStart=/usr/local/bin/node /opt/over_mechanics/server.mjs
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/over-mechanics
+
+[Install]
+WantedBy=multi-user.target

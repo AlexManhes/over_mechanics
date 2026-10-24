@@ -75,6 +75,7 @@ Consulte o [registro de validação](docs/VALIDACAO.md) para a cobertura e os li
 
 - [Executar, configurar e hospedar](docs/GUIA.md)
 - [Acessar pelo celular fora da oficina](docs/ACESSO_ONLINE.md)
+- [Alternativa na nuvem sem mensalidade e com o PC desligado](docs/NUVEM_SEM_MENSALIDADE.md)
 - [Banco, fotos, privacidade e backup](docs/DADOS_E_BACKUP.md)
 - [Mapa do código e manutenção](docs/ARQUITETURA.md)
 - [Validação e testes](docs/VALIDACAO.md)
