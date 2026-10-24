@@ -1,8 +1,8 @@
-# Validação — Mecânica Já 1.1
+# Validação — Mecânica Já 1.2
 
 Windows, Node.js 24.22.1, Chromium integrado. Data: 24/10/2026. Bancos isolados, sem dados/contas de teste incluídos na entrega.
 
-`node --test tests/*.test.mjs` → **31 aprovados, 0 falhas** (inclui o teste que agrupa os subtestes HTTP).
+`node --test tests/*.test.mjs` → **33 aprovados, 0 falhas** (inclui o teste que agrupa os subtestes HTTP).
 
 Cobertura: cadastro, placa/histórico, autorização, sessão e senha, fotos Antes/Depois/Retorno em disco e referências SQLite, persistência após reinício, 30/60 dias, alerta configurável, datas de Brasília, último dia ativo e dia seguinte arquivado, retorno em arquivado, preservação por mais de dois meses, migração legada com rollback e retomada, duas sessões HTTP independentes na mesma base e restauração de backup completo em nova pasta.
 
@@ -29,3 +29,6 @@ CSS/manifesto e empresa desativada: endpoints HTTP 200 com MIME correto e URLs v
 
 
 Reorganização do repositório: backend em src/, guias em docs/ e exemplo de proxy em config/. O iniciador e o caminho padrão de data/ continuam na raiz. A suíte completa foi executada novamente sobre essa estrutura.
+
+
+Preparação online: dois testes adicionais verificam a configuração obrigatória de produção e o fluxo atrás de proxy HTTPS (origem pública automática, chave de ativação, cookie Secure/HttpOnly, dados autenticados e health check público sem dados privados). A suíte passa com 33 testes. A publicação real, o disco do provedor, a conexão entre aparelhos físicos e a migração de dados locais ainda dependem da conta/serviço escolhido; não foram apresentados como concluídos.

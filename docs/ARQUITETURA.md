@@ -6,6 +6,7 @@
 - `src/lib/domain.mjs`: datas de Brasília, cálculo de prazo, cores por situação, classificação em ativos/arquivados, placa e retorno dentro/depois do prazo. O navegador recebe esse mesmo módulo em `/domain.mjs`.
 - `src/lib/access.mjs`: configuração do acesso direto local e limites de acesso por rede.
 - `src/lib/photos.mjs`: gravação privada das fotos em arquivos e migração das imagens legadas do SQLite.
+- `src/lib/runtime.mjs`: endereço público, porta e validações de configuração para hospedagem HTTPS.
 
 O `server.mjs` da raiz apenas importa o backend. Essa entrada mantém compatibilidade com `Iniciar.bat`, `npm start` e comandos anteriores. O caminho padrão de dados continua sendo `data/` na raiz, portanto a reorganização não muda a localização de atendimentos e fotos.
 
@@ -29,6 +30,7 @@ Em `app.js`, comece por `dashboard`, `list`, `repairForm`, `history`, `detail`, 
 - `package.json`: versão mínima do Node e comandos `start`/`test`. Não há dependências de produção externas.
 - `.env.example`: modelo de configuração. Copie para `.env` somente quando precisar ajustar os padrões.
 - `config/Caddyfile.example`: referência para proxy HTTPS, que exige configuração no servidor.
+- `render.yaml`: referência de publicação no Render, com uma instância e volume persistente para banco e fotos; a contratação/publicação é separada.
 - `.gitignore`: impede versionar dados, bancos, fotos da pasta de dados e configurações privadas.
 
 ## Testes — `tests/`

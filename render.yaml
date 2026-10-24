@@ -1,0 +1,34 @@
+# Configuração preparada: criar este serviço exige escolha de um plano pago.
+# Banco e fotos ficam JUNTOS no disco persistente. Não troque por disco efêmero.
+services:
+  - type: web
+    name: over-mechanics
+    runtime: node
+    plan: 0.5c-512mb
+    region: virginia
+    repo: https://github.com/AlexManhes/over_mechanics
+    branch: main
+    buildCommand: node --check src/server.mjs
+    startCommand: node server.mjs
+    healthCheckPath: /healthz
+    numInstances: 1
+    autoDeployTrigger: "off"
+    disk:
+      name: over-mechanics-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 24.22.1
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: AUTH_REQUIRED
+        value: "true"
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: DATA_DIR
+        value: /var/data
+      - key: SETUP_KEY
+        generateValue: true

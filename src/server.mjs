@@ -7,11 +7,13 @@ import path from 'node:path';
 import { todayBrasilia, repairState, selectRepairs, normalizePlate, validateRepair, returnWithin, dayNumber } from './lib/domain.mjs';
 import { photoStore, migratePhotos } from './lib/photos.mjs';
 import { localModeEnabled, isLocalRequest } from './lib/access.mjs';
+import { runtimeConfig } from './lib/runtime.mjs';
 
 // A raiz continua sendo a pasta da instalação, preservando data/ e public/.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const localMode = localModeEnabled();
-const dataDir = process.env.DATA_DIR || path.join(root, 'data');
+const runtime = runtimeConfig(process.env, root);
+const localMode = localModeEnabled({...process.env, PUBLIC_ORIGIN:runtime.publicOrigin});
+const dataDir = runtime.dataDir;
 mkdirSync(dataDir, { recursive: true });
 const db = new DatabaseSync(path.join(dataDir, 'mecanica.sqlite'));
 db.exec(`PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;
@@ -28,6 +30,7 @@ migratePhotos(db, photosStore);
 const q = (sql, ...args) => db.prepare(sql).all(...args);
 const one = (sql, ...args) => db.prepare(sql).get(...args);
 const run = (sql, ...args) => db.prepare(sql).run(...args);
+if(runtime.production && !one("SELECT id FROM users WHERE role != 'local' LIMIT 1") && (!process.env.SETUP_KEY || process.env.SETUP_KEY.length < 24)) throw new Error('Configure uma SETUP_KEY aleatória de pelo menos 24 caracteres antes da primeira publicação.');
 const hash = value => createHash('sha256').update(value).digest('hex');
 const passwordHash = value => { const salt = randomBytes(16).toString('hex'); return `${salt}:${scryptSync(value,salt,64).toString('hex')}`; };
 // Identidade técnica para os vínculos de auditoria, sem cadastrar uma pessoa.
@@ -42,7 +45,7 @@ function accountInput(b) {
   return { name, email, password };
 }
 function transaction(fn) { db.exec('BEGIN IMMEDIATE'); try { const result = fn(); db.exec('COMMIT'); return result; } catch(e) { db.exec('ROLLBACK'); throw e; } }
-const secure = process.env.COOKIE_SECURE === 'true';
+const secure = runtime.secureCookies;
 function cookie(token, age = 43200) { return `mj_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${age}${secure ? '; Secure' : ''}`; }
 function login(user, res) {
   const token = randomBytes(32).toString('hex');
@@ -91,7 +94,7 @@ async function api(req,res,url) {
   const user = currentUser(req), method = req.method, pathname = url.pathname;
   if(localMode && !isLocalRequest(req)) fail('O acesso sem login está disponível somente neste computador.',403);
   if(method !== 'GET') {
-    const expected = process.env.PUBLIC_ORIGIN || `http://${req.headers.host}`;
+    const expected = runtime.publicOrigin || `http://${req.headers.host}`;
     if(req.headers.origin && req.headers.origin !== expected) fail('Origem não autorizada.',403);
     if(req.headers['sec-fetch-site'] === 'cross-site') fail('Origem não autorizada.',403);
     if(!req.headers['content-type']?.startsWith('application/json')) fail('Envie application/json.',415);
@@ -180,11 +183,14 @@ const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=u
 const server=http.createServer(async(req,res)=>{
   res.setHeader('X-Content-Type-Options','nosniff'); res.setHeader('X-Frame-Options','DENY'); res.setHeader('Referrer-Policy','same-origin');
   res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
-  try { const url=new URL(req.url,'http://local'); if(url.pathname.startsWith('/api/')) return await api(req,res,url);
+  if(runtime.production)res.setHeader('Strict-Transport-Security','max-age=15552000');
+  try { const url=new URL(req.url,'http://local');
+    if(url.pathname==='/healthz'&&req.method==='GET'){one('SELECT 1 AS ok');return json(res,{status:'ok'});}
+    if(url.pathname.startsWith('/api/')) return await api(req,res,url);
     if(req.method!=='GET' || !staticFiles[url.pathname]) fail('Página não encontrada.',404);
     const file=path.join(root,'public',staticFiles[url.pathname]); const bytes=readFileSync(file); res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream','Cache-Control':'no-cache'});res.end(bytes);
   } catch(e) { if(!res.headersSent) json(res,{error:e.status ? e.message : e.code?.startsWith('SQLITE') ? 'Não foi possível salvar. Tente novamente.' : e.message || 'Erro interno.'},e.status || (e.code ? 500 : 400)); else res.end(); }
 });
-const port=Number(process.env.PORT || 3000), host=process.env.HOST || '127.0.0.1';
+const {port,host}=runtime;
 server.listen(port,host,()=>console.log(`Mecânica já: http://${host}:${server.address().port}`));
 for(const signal of ['SIGTERM','SIGINT']) process.on(signal,()=>server.close(()=>{db.close();process.exit(0);}));

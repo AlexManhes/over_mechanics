@@ -31,6 +31,7 @@ over_mechanics/
 ├── docs/                     # Guias, validação e imagens das telas
 ├── data/                     # Criada em execução; ignorada pelo Git
 ├── .env.example              # Modelo de configuração sem credenciais
+├── render.yaml               # Referência de hospedagem com disco persistente
 ├── Iniciar.bat               # Iniciador para Windows
 ├── server.mjs                # Entrada compatível para iniciar o backend
 └── package.json              # Comandos e versão necessária do Node
@@ -73,6 +74,7 @@ Consulte o [registro de validação](docs/VALIDACAO.md) para a cobertura e os li
 ## Documentação
 
 - [Executar, configurar e hospedar](docs/GUIA.md)
+- [Acessar pelo celular fora da oficina](docs/ACESSO_ONLINE.md)
 - [Banco, fotos, privacidade e backup](docs/DADOS_E_BACKUP.md)
 - [Mapa do código e manutenção](docs/ARQUITETURA.md)
 - [Validação e testes](docs/VALIDACAO.md)

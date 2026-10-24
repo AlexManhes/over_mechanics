@@ -1,4 +1,4 @@
-# Mecânica Já — versão 1.1.2
+# Mecânica Já — versão 1.2.0
 
 PWA para uma oficina empresarial, com acesso exclusivo aos mecânicos. **Node.js + SQLite nativo + HTML/CSS/JavaScript**, sem framework e sem dependências de produção. Um servidor guarda os dados e as fotos; celular e computador consultam esse mesmo servidor.
 

@@ -1,12 +1,12 @@
 {
   "name": "mecanica-ja",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "private": true,
   "dependencies": {},
   "type": "module",
   "description": "Acompanhamento de reparos de frota para mecânicos",
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=22.13.0 <25"
   },
   "scripts": {
     "start": "node --env-file-if-exists=.env server.mjs",
