@@ -48,7 +48,7 @@ Opção pelo painel da Cloudflare, útil quando ferramentas nativas são bloquea
 
 Alternativamente, em um computador onde o Wrangler possa executar: `npx wrangler login`, depois `npm run deploy:cloud`. O login pode abrir o navegador. `npm run check:cloud` somente compila/verifica, sem publicar.
 
-Neste computador, o Controle de Aplicativo do Windows bloqueou o executável nativo do esbuild durante a tentativa de dry-run. Não foram alteradas as políticas do Windows. A verificação em Linux está declarada em [GitHub Actions](../.github/workflows/check.yml); consulte o resultado da execução do commit antes de considerar a compilação confirmada. A geração dos arquivos estáticos e os testes em Node são verificações separadas.
+Neste computador, o Controle de Aplicativo do Windows bloqueou o executável nativo do esbuild durante a tentativa de dry-run. Não foram alteradas as políticas do Windows. **A compilação foi confirmada em Linux pelo [GitHub Actions do commit c641acd](https://github.com/AlexManhes/over_mechanics/actions/runs/40331013612)**: instalação pelo lockfile, suíte sem falhas e `wrangler deploy --dry-run` concluídos. Esse resultado confirma o pacote, não um deploy real com os segredos do usuário.
 
 ## 4. Configurar os segredos e a Edge Function
 
