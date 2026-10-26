@@ -1,0 +1,31 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createProxy} from '../src/cloud/worker.mjs';
+import {edgeHandler} from '../src/cloud/edge.mjs';
+import {createWorker} from '../src/cloud/api.mjs';
+import {harness,env as base} from './helpers/cloud-harness.mjs';
+import {readFile,readdir} from 'node:fs/promises';
+test('proxy Cloudflare e porta privada da Edge Function: cookies, CSRF e segredo inacessivel',async t=>{
+ const h=await harness();t.after(()=>h.pg.close());await h.addUser('qa@example.test','SenhaFicticia123!');
+ const env={...base,CLOUD_PROXY_KEY:'segredo-ficticio-apenas-do-teste-123456789'};
+ const edge=edgeHandler(env,createWorker({fetcher:h.fetcher}));
+ let last;
+ const proxy=createProxy(async (url,options)=>{last={url:String(url),headers:new Headers(options.headers)};return edge(new Request(url,{...options,duplex:'half'}));});
+ const privateUrl=env.SUPABASE_URL+'/functions/v1/workshop/api/data';
+ const start=h.requests;assert.equal((await edge(new Request(privateUrl))).status,403);assert.equal(h.requests,start);
+ assert.equal((await edge(new Request(privateUrl,{headers:{'x-mj-proxy-key':'errada'}}))).status,403);
+ const session=await proxy.fetch(new Request(env.PUBLIC_ORIGIN+'/api/session'),env);assert.equal(session.status,200);assert.equal((await session.json()).authRequired,true);
+ const login=await proxy.fetch(new Request(env.PUBLIC_ORIGIN+'/api/login',{method:'POST',headers:{Origin:env.PUBLIC_ORIGIN,'Content-Type':'application/json','cf-connecting-ip':'192.0.2.1','x-mj-client-ip':'ip-falso','x-mj-proxy-key':'falso'},body:JSON.stringify({email:'qa@example.test',password:'SenhaFicticia123!'})}),env);
+ assert.equal(login.status,200);assert.equal(last.headers.get('x-mj-client-ip'),'192.0.2.1');assert.equal(last.headers.get('x-mj-proxy-key'),env.CLOUD_PROXY_KEY);
+ const text=await login.text();assert.ok(!text.includes(env.CLOUD_PROXY_KEY));assert.ok(!text.includes(env.SUPABASE_SERVICE_ROLE_KEY));
+ const cookie=login.headers.get('set-cookie').split(';')[0];
+ const data=await proxy.fetch(new Request(env.PUBLIC_ORIGIN+'/api/data',{headers:{Cookie:cookie}}),env);assert.equal(data.status,200);assert.equal(data.headers.get('cache-control'),'no-store');
+ const denied=await proxy.fetch(new Request(env.PUBLIC_ORIGIN+'/api/settings',{method:'POST',headers:{Cookie:cookie,Origin:'https://outro.example','Content-Type':'application/json'},body:'{}'}),env);assert.equal(denied.status,403);
+ assert.equal((await proxy.fetch(new Request(env.PUBLIC_ORIGIN+'/.env.cloud'),env)).status,404);
+ assert.equal((await proxy.fetch(new Request(env.PUBLIC_ORIGIN+'/api/session'),{})).status,503);
+});
+test('build inclui somente a PWA publica e nenhum dado/segredo',async()=>{
+ const root=new URL('../',import.meta.url),files=await readdir(new URL('dist/cloud/',root));
+ assert.ok(files.includes('domain.mjs'));assert.ok(!files.some(f=>/env|sqlite|backup|secret/i.test(f)));
+ const worker=await readFile(new URL('src/cloud/worker.mjs',root),'utf8');assert.ok(!worker.includes('SUPABASE_SERVICE_ROLE_KEY'));
+});

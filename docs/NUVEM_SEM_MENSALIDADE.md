@@ -1,5 +1,7 @@
 # Nuvem sem mensalidade de hospedagem
 
+**Referência opcional não selecionada.** O usuário prefere não informar cartão. A solução atual foi adaptada para [Cloudflare + Supabase](CLOUDFLARE_SUPABASE.md); siga esse guia. Nenhuma conta ou VM Oracle foi criada.
+
 ## Situação
 
 O objetivo é acessar com o PC da oficina desligado, sem comprar domínio e sem mensalidade. Uma alternativa compatível com o backend atual é uma VM **Oracle Cloud Always Free**, com Ubuntu, Node.js, SQLite e fotos no disco persistente da VM. Um subdomínio gratuito do DuckDNS e o Caddy podem fornecer o endereço HTTPS.

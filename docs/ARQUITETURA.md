@@ -24,6 +24,25 @@ O `server.mjs` da raiz apenas importa o backend. Essa entrada mantém compatibil
 
 Em `app.js`, comece por `dashboard`, `list`, `repairForm`, `history`, `detail`, `returnForm` e `settings`. As referências a “empresa responsável” estão comentadas; a coluna legada é preservada no banco.
 
+## Backend online — Cloudflare + Supabase
+
+| Arquivo | Onde alterar |
+| --- | --- |
+| `src/cloud/worker.mjs` | Entrega da PWA, proxy em streaming e cabeçalhos na Cloudflare |
+| `src/cloud/edge.mjs` | Verificação da chave privada entre Worker e Edge Function |
+| `src/cloud/api.mjs` | Mesmas rotas usadas pela interface, autorização, sessões, reparos, retornos e fotos |
+| `src/cloud/supabase.mjs` | Chamadas HTTP ao Auth, PostgreSQL/RPC e Storage |
+| `supabase/migrations/001_workshop.sql` | Esquema PostgreSQL, RLS, transações e funções de leitura/importação |
+| `supabase/functions/workshop/index.ts` | Entrada Deno e variáveis da Edge Function |
+| `scripts/build-cloud.mjs` | Montagem da PWA pública e cópia das regras compartilhadas para a função |
+| `scripts/cloud-admin.mjs` | Primeiro administrador e recuperação de vínculo de mecânico |
+| `scripts/cloud-backup.mjs` | Exportar SQLite, verificar fotos, importar, fazer backup/restaurar |
+| `wrangler.jsonc` | Nome do Worker, runtime e assets |
+
+A interface continua usando `/api/*` na mesma origem. O Worker encaminha as requisições e a função Supabase executa as operações. A chave `service_role` fica apenas na função/ferramentas administrativas. O navegador não precisa de SDK ou chave Supabase. Fotos usam Storage privado, com metadados no PostgreSQL e hashes para backup. A regra de prazos continua em **um** arquivo: `src/lib/domain.mjs`; o build a copia para os destinos necessários.
+
+Arquivos em `src/cloud/domain.mjs`, `supabase/functions/_shared/` e `dist/cloud/` são gerados, ignorados pelo Git e não devem ser editados manualmente. Execute o build depois de mudar a regra/API. Este backend é independente do SQLite local; migrar dados e escolher um endereço único é necessário.
+
 ## Execução e infraestrutura
 
 - `Iniciar.bat`: iniciador Windows com texto ASCII e quebras CRLF.
@@ -37,7 +56,7 @@ Em `app.js`, comece por `dashboard`, `list`, `repairForm`, `history`, `detail`, 
 
 `domain.test.mjs` verifica as regras de calendário e arquivamento; `api.test.mjs` cobre HTTP, persistência, fotos e backup/restauração; `local.test.mjs` cobre uso direto e reativação do login; `photos.test.mjs` cobre migração; `service-worker.test.mjs` cobre cache e falhas de conexão; `launcher.test.mjs` verifica a inicialização Windows.
 
-Execute todos com `node --test tests/*.test.mjs` a partir da raiz. Cada teste usa dados temporários separados dos registros da oficina.
+Execute `npm test` a partir da raiz, depois de instalar as dependências de desenvolvimento. Ele prepara os módulos compartilhados e executa a suíte. `cloud.test.mjs` usa PostgreSQL em WASM e adaptadores HTTP de Auth/Storage exclusivos para testes; `cloud-proxy.test.mjs` verifica proxy, chave privada e integração. Cada teste usa dados temporários separados dos registros da oficina. Serviços externos reais não são simulados como publicados.
 
 ## Fluxo dos dados
 

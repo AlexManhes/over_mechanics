@@ -12,6 +12,13 @@
 .env
 .env.*
 !.env.example
+!.env.cloud.example
+.dev.vars*
+.wrangler/
+/dist/
+/supabase/.temp/
+/supabase/functions/_shared/
+/src/cloud/domain.mjs
 
 # Dependências, arquivos temporários e relatórios locais.
 node_modules/

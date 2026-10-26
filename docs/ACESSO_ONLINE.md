@@ -2,7 +2,7 @@
 
 ## Situação desta entrega
 
-**Preferência atual: acesso com o PC desligado e sem mensalidade.** Veja a [alternativa em VM Always Free com subdomínio gratuito](NUVEM_SEM_MENSALIDADE.md), suas condições e o que ainda precisa ser configurado. A referência Render abaixo é paga e opcional; nenhum serviço pago foi contratado ou publicado.
+**Opção atual: Cloudflare + Supabase, sem cartão, com o PC desligado.** O backend foi adaptado para PostgreSQL, autenticação e fotos privadas na nuvem. Siga [o guia atual de configuração, migração e backup](CLOUDFLARE_SUPABASE.md). A configuração de contas e a publicação ainda estão pendentes. A referência Render abaixo é paga e opcional; nenhum serviço pago foi contratado ou publicado.
 
 O código foi preparado para um servidor Node.js com SQLite e **disco persistente**, usando Render como configuração de referência. Isso ainda não significa que o serviço já foi contratado ou publicado. A publicação depende de conectar uma conta de hospedagem, escolher o plano e confirmar a criação do serviço.
 

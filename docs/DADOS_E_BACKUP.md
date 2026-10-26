@@ -1,5 +1,7 @@
 # Banco, fotos, configuração e backup
 
+Para a versão online Cloudflare + Supabase, consulte os [comandos de migração, backup e restauração](CLOUDFLARE_SUPABASE.md). O PostgreSQL e o bucket privado substituem `data/` nessa execução. O pacote de backup online inclui os dados de negócio e as imagens referenciadas; contas Auth, senhas e segredos precisam ser administrados separadamente. O texto abaixo continua válido para a instalação local SQLite.
+
 ## Por que esses arquivos não estão no GitHub?
 
 O repositório é público e guarda o código necessário para executar a aplicação. Os arquivos criados durante o uso são dados da oficina:

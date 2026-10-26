@@ -1,4 +1,6 @@
-# Mecânica Já — versão 1.2.0
+# Mecânica Já — versão 1.3.0
+
+Para a opção online com PC desligado e sem cartão, siga [Cloudflare + Supabase](CLOUDFLARE_SUPABASE.md): essa execução usa PostgreSQL, Supabase Auth e Storage privado. Este guia abaixo descreve a execução local Node/SQLite e referências alternativas de hospedagem. Uma instalação não sincroniza automaticamente com a outra. Os registros reais precisam ser migrados e todos devem usar o mesmo endereço online depois da migração.
 
 PWA para uma oficina empresarial, com acesso exclusivo aos mecânicos. **Node.js + SQLite nativo + HTML/CSS/JavaScript**, sem framework e sem dependências de produção. Um servidor guarda os dados e as fotos; celular e computador consultam esse mesmo servidor.
 
@@ -144,7 +146,7 @@ Os testes executam esse ciclo em pasta separada e recuperam novamente registros 
 
 ## Testes e organização do código
 
-Execute `node --test tests/*.test.mjs`. **31 testes aprovados**, incluindo cadastro, histórico, acesso, 30/60 dias, Brasília, arquivamento, retorno em arquivado, fotos no disco, migração, duas sessões na mesma base e backup/restauração. Veja **[VALIDACAO.md](VALIDACAO.md)** para os limites da conferência e capturas de tela em `docs/images/`.
+Depois de instalar as dependências de desenvolvimento, execute `npm test`. **47 testes aprovados** na versão 1.3.0, incluindo o backend local e a adaptação à nuvem: cadastro, histórico, acesso, 30/60 dias, Brasília, arquivamento, retorno em arquivado, fotos, migração SQLite/PostgreSQL, dois clientes, proxy privado e backup/restauração. Veja **[VALIDACAO.md](VALIDACAO.md)** para distinguir os testes locais da configuração nos provedores e as capturas em `docs/images/`.
 
 | Ajuste | Arquivo/funções |
 | --- | --- |

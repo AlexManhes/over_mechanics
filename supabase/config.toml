@@ -1,0 +1,4 @@
+project_id = "over-mechanics"
+[functions.workshop]
+# CLOUD_PROXY_KEY e conferida antes de qualquer operacao. Nao remova a verificacao.
+verify_jwt = false

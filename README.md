@@ -2,7 +2,9 @@
 
 Aplicativo para registrar reparos, consultar o histórico por placa, guardar fotos de Antes/Depois e acompanhar possíveis retornos dentro do prazo definido pelo mecânico.
 
-**Node.js + SQLite + HTML/CSS/JavaScript.** Sem dependências de produção para instalar. No modo local atual, abre diretamente no painel, sem cadastro ou senha.
+**Versão 1.3.0.** A versão online foi adaptada para **Cloudflare + Supabase (PostgreSQL, Auth e fotos privadas)**. Depois de configurada e publicada, funciona com o PC desligado e sem domínio comprado. Veja [como configurar os planos gratuitos](docs/CLOUDFLARE_SUPABASE.md). A publicação e a transferência dos dados reais ainda dependem das contas do usuário; não foram executadas automaticamente.
+
+A execução local continua disponível com **Node.js + SQLite + HTML/CSS/JavaScript**, sem dependências de produção, abrindo diretamente no painel sem cadastro ou senha. As duas instalações não sincronizam automaticamente: depois da migração, use o endereço online em todos os aparelhos.
 
 ## Executar
 
@@ -27,10 +29,14 @@ over_mechanics/
 │   └── lib/                  # Prazos, acesso local e armazenamento de fotos
 ├── public/                   # Telas, estilos, fotos no envio e PWA
 ├── tests/                    # Regras, API, persistência, backup e iniciador
+├── supabase/                 # Migração PostgreSQL e entrada da Edge Function
+├── scripts/                  # Build online, contas, migração e backup
 ├── config/                   # Exemplos de infraestrutura
 ├── docs/                     # Guias, validação e imagens das telas
 ├── data/                     # Criada em execução; ignorada pelo Git
 ├── .env.example              # Modelo de configuração sem credenciais
+├── .env.cloud.example        # Modelo privado para ferramentas da nuvem
+├── wrangler.jsonc            # Worker Cloudflare e assets públicos
 ├── render.yaml               # Referência de hospedagem com disco persistente
 ├── Iniciar.bat               # Iniciador para Windows
 ├── server.mjs                # Entrada compatível para iniciar o backend
@@ -46,6 +52,8 @@ Veja o [mapa do código](docs/ARQUITETURA.md) para localizar cada funcionalidade
 - `data/mecanica.sqlite`: veículos, reparos, retornos, contas e referências das fotos.
 - `data/photos/`: imagens dos reparos, guardadas no servidor.
 - `.env`: configuração particular, que pode conter chaves e senhas.
+
+Na versão online, o PostgreSQL e o bucket privado ficam no Supabase. A chave administrativa permanece no servidor e nas ferramentas privadas; não vai para o navegador. Há comandos para transferir o SQLite/fotos e fazer backup da nuvem, sem migrar as senhas antigas. Consulte [migração e backup online](docs/CLOUDFLARE_SUPABASE.md).
 
 Esses arquivos ficam fora do Git para preservar os dados da oficina. Isso **não os apaga do computador**. O modelo `.env.example` e a criação das tabelas estão no código, então uma instalação nova funciona sem receber um banco real. Para recuperar o histórico, restaure um backup completo.
 
@@ -66,16 +74,20 @@ O campo “empresa responsável” está comentado e desativado. Valores antigos
 ## Testar
 
 ```sh
-node --test tests/*.test.mjs
+npm install
+npm test
 ```
+
+As dependências de desenvolvimento declaradas são PGlite (PostgreSQL em WASM para os testes) e Wrangler (Cloudflare). Para usar o lockfile incluído, prefira `pnpm install --frozen-lockfile` e `pnpm test`. A verificação de publicação é `npm run check:cloud`; ela não faz deploy. O workflow do GitHub testa e compila em Linux sem credenciais de produção.
 
 Consulte o [registro de validação](docs/VALIDACAO.md) para a cobertura e os limites dos testes. Câmera física, instalação em celulares e acesso entre aparelhos dependem do ambiente e de configuração externa.
 
 ## Documentação
 
 - [Executar, configurar e hospedar](docs/GUIA.md)
+- [Configurar Cloudflare + Supabase sem cartão](docs/CLOUDFLARE_SUPABASE.md)
 - [Acessar pelo celular fora da oficina](docs/ACESSO_ONLINE.md)
-- [Alternativa na nuvem sem mensalidade e com o PC desligado](docs/NUVEM_SEM_MENSALIDADE.md)
+- [Referência Oracle opcional, não selecionada](docs/NUVEM_SEM_MENSALIDADE.md)
 - [Banco, fotos, privacidade e backup](docs/DADOS_E_BACKUP.md)
 - [Mapa do código e manutenção](docs/ARQUITETURA.md)
 - [Validação e testes](docs/VALIDACAO.md)

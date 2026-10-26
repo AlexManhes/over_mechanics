@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "over-mechanics",
+  "main": "src/cloud/worker.mjs",
+  "compatibility_date": "2026-10-26",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {"directory": "./dist/cloud", "binding": "ASSETS", "run_worker_first": true},
+  "observability": {"enabled": false}
+  // SUPABASE_URL e CLOUD_PROXY_KEY sao secrets. Nenhuma chave real aqui.
+}
